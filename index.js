@@ -4,7 +4,6 @@ const express= require('express');
 var bodyParser = require('body-parser');
 const ejs = require('ejs');
 var path = require('path');
-const crypto = require("crypto");
 
 const app=express();
 
@@ -71,6 +70,7 @@ var js=[];
 app.listen(3001, () => {
     console.log("Server is running at port 3001");
   });
+const curPatientID = 1;
 
 // Routes
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -115,7 +115,7 @@ app.get("/userData", async(req, res) => {
 app.post("/addAnecdote", async(req, res) => {
 
   console.log(req.body);
-  const id = crypto.randomBytes(16).toString("hex");
+  const id = Math.floor(Math.random() * 100000);
   const result = await client.db("FamilyRemindersAppDB").collection("Anecdote").insertOne({id:id,title:req.body.anecName,description:req.body.subject,date:req.body.anecDate});
   res.redirect('/');
 
@@ -125,7 +125,7 @@ app.post("/addAnecdote", async(req, res) => {
 app.post("/addEvent", async(req, res) => {
 
   console.log(req.body);
-  const id = crypto.randomBytes(16).toString("hex");
+  const id = Math.floor(Math.random() * 100000);
   const result = await client.db("FamilyRemindersAppDB").collection("Event").insertOne({id:id,title:req.body.eventName,description:req.body.eventSubject,startDate:req.body.eventDate});
   res.redirect('/');
 
@@ -133,8 +133,24 @@ app.post("/addEvent", async(req, res) => {
 app.post("/addFamily", async(req, res) => {
 
   console.log(req.body);
-  const id = crypto.randomBytes(16).toString("hex");
+  const id = Math.floor(Math.random() * 100000);
   const result = await client.db("FamilyRemindersAppDB").collection("Person").insertOne({id:id,firstName:req.body.fname,lastName:req.body.lname,dob:req.body.dob,gender:req.body.gender,relatedTo:{"1":req.body.relation},age:req.body.age,phone:req.body.phone});
+  var patientObject = await client.db("FamilyRemindersAppDB").collection("Patient").findOne({ id: curPatientID });
+  if(patientObject.family[req.body.relation] != null) {
+    patientObject.family[req.body.relation].push(id);
+  } else {
+    var arrFam = []
+    arrFam.push(id);
+    patientObject.family[req.body.relation] = arrFam;
+  }
+  const filter = { id: curPatientID };
+  const options = { upsert: true };
+  const updateDoc = {
+      $set: {
+        family: patientObject.family
+      },
+    };
+  const result2 = await client.db("FamilyRemindersAppDB").collection("Patient").updateOne(filter, updateDoc, options);
   res.redirect('/');
 
 });
