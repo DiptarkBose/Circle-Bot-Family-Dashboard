@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circle Bot - Family Dashboard</title>
+
+    <link rel="stylesheet" href="profile.css">
+    <link href="calendar.css" rel="stylesheet">
+    <script defer src="calendar.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div class="topnav">
+        <a class="active" href="#home">Home</a>
+
+        <div class="login-container">
+          <!--<form action="/action_page.php">
+            <input type="text" placeholder="Username" name="username">
+            <input type="text" placeholder="Password" name="psw">
+            <button type="submit">Login</button>
+          </form>-->
+          <a href="#" class="login"><i class="fa fa-fw fa-user"></i> Login</a>
+        </div>
+
+      </div>
+    <div class="tab">
+        <button class="tablinks" onclick="openCity(event, 'User')" id="defaultOpen">Profile</button>
+        <button class="tablinks" onclick="openCity(event, 'Family')" >Add Family/Friends</button>
+        <button class="tablinks" onclick="openCity(event, 'Events')">Events</button>
+        <button class="tablinks" onclick="openCity(event, 'Anecdotes')">Anecdotes</button>
+      </div>
+      <div id="User" class="tabcontent">
+        <h3><b>Your Profile</b></h3>
+        <div class="myImg">
+        <img id="myImg" src="https://www.w3schools.com/w3images/avatar3.png" alt="Avatar" style="width:200%;max-width:200px">
+        </div>
+        <div class="bioInfo">
+          <p id="fetch-data"></p>
+
+          <script>
+              fetch('/userData').then((response) => {
+            return response.json();
+          }).then((data) => {
+            document.getElementById('fetch-data').innerHTML = `<b>Name:</b> ${data.userName}<br><b>Age:</b> ${data.userAge}<br><b>Phone No.:</b> ${data.userPhone}`;
+          }).catch((error) => {
+            console.log('Error fetching data:', error);
+          });
+
+
+            </script>
+
+        <!-- <p>Name: John Doe</p>
+        <p>Age: 27</p>
+        <p>Phone no: +1(123)456-789</p>
+         -->
+        <br>
+      </div>
+        <br/> <br/> <br/> <br/><br/>
+        <h3><b>Patients you are connected to</b></h3>
+        <div class="patcards">
+            <script>
+              fetch('/patientData')
+                .then(response => response.json())
+                .then(data => {
+                  // Create HTML code for each patient
+
+                  data.forEach(patient => {
+                    const html = `
+                      <div class="w3-card w3-round w3-white w3-hover-shadow card">
+                        <div class="w3-container">
+                        <h4 class="w3-center"><b>${patient.patientName}</b></h4>
+                        <p class="w3-center"><img src=${patient.photo} class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+                        <hr>
+                        <p>Gender: ${patient.patientGender}</p>
+                        <p>Birth Date: ${patient.patientBday}</p>
+                        <p>Relation: ${patient.patientRelation}</p>
+                        </div>
+                      </div>
+                    `;
+
+                    // Append the HTML code to the "patcards" div
+                    document.querySelector('.patcards').insertAdjacentHTML('beforeend', html);
+                  });
+                })
+                .catch(error => console.error(error));
+
+
+
+            </script>
+          </div>
+
+
+
+          </div>
+        </div>
+
+      </div>
+
+      <div id="Family" class="tabcontent">
+        <h3>Add Family and Friends</h3>
+
+
+
+        <div class="Addbuttons">
+
+            <button class="btn more" onclick="openForm()">Add a member</button>
+        </div>
+
+        <div class="form popup" id="famForm">
+          <form action="/addFamily" method="POST" >
+
+            <label for="fname">First Name</label>
+            <input type="text" id="fname" name="fname" placeholder="First name">
+
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" name="lname" placeholder="Last name">
+<!--
+            <label for="famOrFri">Family or Friend</label>
+            <select id="famOrFri" name="famOrFri">
+              <option value="Family">Family</option>
+              <option value="Friend">Friend</option>
+
+            </select> -->
+
+            <label for="relation">Relation</label>
+            <input type="text" id="relation" name="relation" placeholder="Your realtion to patient">
+
+            <label for="age">Age</label>
+            <input type="text" id="age" name="age" placeholder="Your age">
+
+            <label for="age">Birth Date</label>
+            <input type="text" id="bday" name="bday" placeholder="Your Birthday">
+
+            <label for="age">Gender</label>
+            <input type="text" id="gender" name="gender" placeholder="Gender">
+
+            <label for="phone">Phone No.</label>
+            <input type="text" id="phone" name="phone" placeholder  ="Your phone number..">
+
+            <label for="address">Address</label>
+            <input type="text" id="address" name="address" placeholder="Your address..">
+
+            <input type="submit" value="Submit" onclick="closeForm()">
+
+
+          </form>
+        </div>
+        <script>
+          function openForm() {
+            document.getElementById("famForm").style.display = "block";
+          }
+
+          function closeForm() {
+            document.getElementById("famForm").style.display = "none";
+          }
+          </script>
+      </div>
+
+      <div id="Events" class="tabcontent">
+
+        <h3>Add Events</h3>
+        <!-- (A) PERIOD SELECTOR -->
+        <div id="calPeriod">
+          <input id="calBack" type="button" value="&lt;">
+          <select id="calMonth"></select>
+          <input type="number" id="calYear">
+          <input id="calNext" type="button" value="&gt;">
+        </div>
+
+        <!-- (B) CALENDAR -->
+        <div id="calWrap"></div>
+
+        <!-- (C) EVENT FORM -->
+        <dialog id="calForm"><form method="dialog">
+          <div id="evtClose">X</div>
+          <h2>CALENDAR EVENT</h2>
+          <label>Date</label>
+          <input type="text" id="evtDate" readonly>
+          <label>Details</label>
+          <textarea id="evtTxt" required></textarea>
+
+          <input id="evtDel" type="button" value="Delete">
+          <input id="evtSave" type="submit" value="Save">
+        </form></dialog>
+        <script src="calendar.js"></script>
+
+
+
+
+      </div>
+
+      <div id="Anecdotes" class="tabcontent">
+        <h3>Add Anecdotes</h3>
+        <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+          <img src="https://www.w3schools.com/w3images/avatar5.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+          <span class="w3-right w3-opacity">4/12/23</span>
+          <h4>Emily Doe</h4><br>
+          <hr class="w3-clear">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          <!--<button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>  Like</button>
+          <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button> -->
+        </div>
+        <div class="Addbuttons">
+          <button class="btn more" onclick="openAForm()">Add Anecdote</button>
+        </div>
+        <div class="form popup" id="aneForm">
+          <form action="/addAnecdote" method="POST">
+
+            <label for="anecName"> Anecdotes Name</label>
+            <input type="text" id="anecName" name="anecName" placeholder="Enter the name of the anecdote..">
+
+            <label for="anecDate">Anecdotes Date</label>
+            <input type="text" id="anecDate" name="anecDate" placeholder="Enter the date of the anecdote..">
+
+            <label for="subject">Anecdotes Description</label>
+            <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
+
+            <input type="submit" value="Submit">
+            <!-- <button type="submit">Submit</button>  -->
+
+
+          </form>
+        </div>
+        <script>
+          function openAForm() {
+            document.getElementById("aneForm").style.display = "block";
+          }
+
+          function closeAForm() {
+            document.getElementById("aneForm").style.display = "none";
+          }
+          </script>
+      </div>
+      <script>
+        function openCity(evt, cityName) {
+          var i, tabcontent, tablinks;
+          tabcontent = document.getElementsByClassName("tabcontent");
+          for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+          }
+          tablinks = document.getElementsByClassName("tablinks");
+          for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+          }
+          document.getElementById(cityName).style.display = "block";
+          evt.currentTarget.className += " active";
+        }
+
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+        </script>
+</body>
+</html>
