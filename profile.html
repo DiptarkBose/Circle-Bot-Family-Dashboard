@@ -32,7 +32,7 @@
         <button class="tablinks" onclick="openCity(event, 'User')" id="defaultOpen">Profile</button>
         <button class="tablinks" onclick="openCity(event, 'Family')" >Add Family/Friends</button>
         <button class="tablinks" onclick="openCity(event, 'Events')">Events</button>
-        <button class="tablinks" onclick="openCity(event, 'Anecdotes')">Anecdotes</button>
+        <button class="tablinks" onclick="openCity(event, 'Anecdotes')">Interactions with Patient</button>
       </div>
       <div id="User" class="tabcontent">
         <h3><b>Your Profile</b></h3>
@@ -195,7 +195,7 @@
       </div>
 
       <div id="Anecdotes" class="tabcontent">
-        <h3>Add Anecdotes</h3>
+        <h3>Interactions with Patient</h3>
         <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
           <img src="https://www.w3schools.com/w3images/avatar5.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
           <span class="w3-right w3-opacity">4/12/23</span>
@@ -206,18 +206,18 @@
           <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>  Comment</button> -->
         </div>
         <div class="Addbuttons">
-          <button class="btn more" onclick="openAForm()">Add Anecdote</button>
+          <button class="btn more" onclick="openAForm()">Add Interactions with Patient</button>
         </div>
         <div class="form popup" id="aneForm">
           <form action="/addAnecdote" method="POST">
 
-            <label for="anecName"> Anecdotes Name</label>
+            <label for="anecName"> Interaction Name</label>
             <input type="text" id="anecName" name="anecName" placeholder="Enter the name of the anecdote..">
 
-            <label for="anecDate">Anecdotes Date</label>
+            <label for="anecDate">Interaction Date</label>
             <input type="text" id="anecDate" name="anecDate" placeholder="Enter the date of the anecdote..">
 
-            <label for="subject">Anecdotes Description</label>
+            <label for="subject">Interaction Description</label>
             <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
 
             <input type="submit" value="Submit">

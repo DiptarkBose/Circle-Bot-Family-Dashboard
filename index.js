@@ -71,6 +71,7 @@ app.listen(3001, () => {
     console.log("Server is running at port 3001");
   });
 const curPatientID = 1;
+const curMemberID = 102;
 
 // Routes
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -117,9 +118,25 @@ app.post("/addAnecdote", async(req, res) => {
   console.log(req.body);
   const id = Math.floor(Math.random() * 100000);
   const result = await client.db("FamilyRemindersAppDB").collection("Anecdote").insertOne({id:id,title:req.body.anecName,description:req.body.subject,date:req.body.anecDate});
+
+  var patientObject = await client.db("FamilyRemindersAppDB").collection("Patient").findOne({ id: curPatientID });
+  if(patientObject.anecdotes[curMemberID] != null) {
+    patientObject.anecdotes[curMemberID].push(id);
+  } else {
+    var arrAnecdotes = []
+    arrAnecdotes.push(id);
+    patientObject.anecdotes[curMemberID] = arrAnecdotes;
+  }
+  const filter = { id: curPatientID };
+  const options = { upsert: true };
+  const updateDoc = {
+      $set: {
+        anecdotes: patientObject.anecdotes
+      },
+    };
+  const result2 = await client.db("FamilyRemindersAppDB").collection("Patient").updateOne(filter, updateDoc, options);
+
   res.redirect('/');
-
-
 });
 
 app.post("/addEvent", async(req, res) => {
