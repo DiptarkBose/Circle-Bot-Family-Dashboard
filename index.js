@@ -15,7 +15,6 @@ const client = new MongoClient(url);
 
 async function findRelationName(id) {
     const result = await client.db("FamilyRemindersAppDB").collection("Person").findOne({ id: id });
-
     return result.firstName;
 }
 
@@ -112,6 +111,26 @@ app.get("/userData", async(req, res) => {
 
 
 });
+app.get("/userAnecdote", async(req, res) => {
+  const id = 102;
+  const userData = await client.db("FamilyRemindersAppDB").collection("Anecdote").find().toArray();
+  console.log("iiiii",userData);
+  const arrayy=[];
+  for (let i=0; i<userData.length; i++) {
+
+    const userDate = userData[i].date;
+    const userTitle = userData[i].title;
+    const userDescription = userData[i].description;
+    json_data={"userDate":userDate,"userTitle":userTitle,"userDescription":userDescription};
+    arrayy.push(json_data);
+
+  }
+  res.json(arrayy);
+
+
+
+
+});
 
 app.post("/addAnecdote", async(req, res) => {
 
@@ -144,6 +163,23 @@ app.post("/addEvent", async(req, res) => {
   console.log(req.body);
   const id = Math.floor(Math.random() * 100000);
   const result = await client.db("FamilyRemindersAppDB").collection("Event").insertOne({id:id,title:req.body.eventName,description:req.body.eventSubject,startDate:req.body.eventDate});
+
+  var patientObject = await client.db("FamilyRemindersAppDB").collection("Patient").findOne({ id: curPatientID });
+  if(patientObject.events != null) {
+    patientObject.events.push(id);
+  } else {
+    var arrEvents = []
+    arrEvents.push(id);
+    patientObject.events = arrEvents;
+  }
+  const filter = { id: curPatientID };
+  const options = { upsert: true };
+  const updateDoc = {
+      $set: {
+        events: patientObject.events
+      },
+    };
+  const result2 = await client.db("FamilyRemindersAppDB").collection("Patient").updateOne(filter, updateDoc, options);
   res.redirect('/');
 
 });
@@ -171,6 +207,7 @@ app.post("/addFamily", async(req, res) => {
   res.redirect('/');
 
 });
+
 app.get("/patientData", async(req, res) => {
   const photo_urls=["OldMan.avif","Oldwoman.avif"];
 
@@ -202,26 +239,3 @@ app.get("/patientData", async(req, res) => {
 
 
 });
-
-// app.get("/", async(req, res) => {
-//  res.send("hello");});
-// //   res.sendFile(__dirname + '/profile.html', {
-
-// //         });
-// //         const data = await findPatientRelatives("John");
-// //         const d=await insertPerson(1,"fn","ln","dob","gender","relation","photoURL")
-
-// //         console.log(d);
-// //         // res.json(data);
-// app.get("/family", async(req, res) => {
-//    const data = await findPatientRelatives("John");
-//    res.send(data);
-
-// });
-
-
-
-// app.post("/",function(req,res,next)  {
-//   res.send("got a Post request");
-
-// });
