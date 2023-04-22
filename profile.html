@@ -69,20 +69,37 @@
                 .then(response => response.json())
                 .then(data => {
                   // Create HTML code for each patient
-
+                  let i=0;
                   data.forEach(patient => {
-                    const html = `
-                      <div class="w3-card w3-round w3-white w3-hover-shadow card">
-                        <div class="w3-container">
-                        <h4 class="w3-center"><b>${patient.patientName}</b></h4>
-                        <p class="w3-center"><img src=${patient.photo} class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
-                        <hr>
-                        <p>Gender: ${patient.patientGender}</p>
-                        <p>Birth Date: ${patient.patientBday}</p>
-                        <p>Relation: ${patient.patientRelation}</p>
+                    let html = '';
+                    if(i==0) {
+                      html = `
+                        <div class="w3-card w3-round w3-white start w3-hover-shadow card">
+                          <div class="w3-container">
+                          <h4 class="w3-center"><b>${patient.patientName}</b></h4>
+                          <p class="w3-center"><img src=${patient.photo} class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+                          <hr>
+                          <p>Gender: ${patient.patientGender}</p>
+                          <p>Birth Date: ${patient.patientBday}</p>
+                          <p>Relation: ${patient.patientRelation}</p>
+                          </div>
                         </div>
-                      </div>
-                    `;
+                      `;
+                    } else {
+                        html = `
+                        <div class="w3-card w3-round w3-white w3-hover-shadow card">
+                          <div class="w3-container">
+                          <h4 class="w3-center"><b>${patient.patientName}</b></h4>
+                          <p class="w3-center"><img src=${patient.photo} class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+                          <hr>
+                          <p>Gender: ${patient.patientGender}</p>
+                          <p>Birth Date: ${patient.patientBday}</p>
+                          <p>Relation: ${patient.patientRelation}</p>
+                          </div>
+                        </div>
+                      `;
+                    }
+                    i++;
 
                     // Append the HTML code to the "patcards" div
                     document.querySelector('.patcards').insertAdjacentHTML('beforeend', html);
