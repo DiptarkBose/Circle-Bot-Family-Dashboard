@@ -24,7 +24,8 @@
             <input type="text" placeholder="Password" name="psw">
             <button type="submit">Login</button>
           </form>-->
-          <a href="#" class="login"><i class="fa fa-fw fa-user"></i> Login</a>
+          <!-- Hard code user for now, implement oAuth afterwards -->
+          <a href="#" class="login"><i class="fa fa-fw fa-user"></i>Jack Doe</a>
         </div>
 
       </div>
@@ -102,7 +103,7 @@
       <div id="Family" class="tabcontent">
         <h3><b>Add Family and Friends</b></h3>
 
-        <center><img src="add_family_icon.png" width="200" height="200"> </center>
+        <center><img src="add_family_icon.png" width="300" height="300"> </center>
         <p>On this page, you can add the patient's all family members and friends to Circle Bot's database. So that whenever the patient has trouble recalling certain family members and friends, the Circle Bot Alexa skill can fetch the relevant details for them! The more people you add, the more help Circle Bot can provide to the patient. </p>
 
         <div class="Addbuttons">
@@ -162,10 +163,12 @@
 
       <div id="Events" class="tabcontent">
 
-        <h3>Add Events</h3>
+        <h3><b>Add Events</b></h3>
+        <center><img src="event.png" width="200" height="200"> </center>
+        <p>On this page, you can add any planned family events to Circle Bot's database. The Circle Bot Alexa Skill then helps the patient stay up to date with all the family related events, ensuring that they never miss any familu gatherings! </p>
         <div class="Addbuttons">
 
-          <button class="btn more" onclick="openEForm()">Add Event</button>
+          <button class="btn more" onclick="openEForm()">Add an Event</button>
         </div>
 
         <div class="form popup" id="eveForm">
@@ -197,8 +200,8 @@
 
       <div class="o">
         <div id="Anecdotes" class="tabcontent">
-          <h3>Interactions with Patient</h3>
-
+          <h3><b>Interactions with Patient</b></h3>
+          <p>On this page, you can add interactions you've had with the patient. The Circle Bot Alexa Skill then helps the patient recall these important interactions with you, sometimes even helping them recognize their loved ones in the process! Add more interactions to provide more support to the patient.</p>
           <div class="anecdote-container"></div>
 
           <script>
@@ -215,7 +218,6 @@
                 data.forEach(a => {
                   const html = `
                   <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-          <img src="https://www.w3schools.com/w3images/avatar5.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
           <span class="w3-right w3-opacity">${a.userDate}</span>
           <h4>${a.userTitle}</h4><br>
           <hr class="w3-clear">
