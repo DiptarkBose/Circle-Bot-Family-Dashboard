@@ -26,6 +26,6 @@ The Web UI was coded using HTML, CSS and JavaScript. Here are the various featur
 
 - Interactions with Patient Page: Enables the user to see all the stored interactions the patient has had with the patient as well as the ability to add new ones.
 
-## 3. MongoDB Database
+## 2. MongoDB Database
 
 - This is the central storage that all the data is stored, updated, and retrieved from. Data is added to the MongoDB database via the forms on the Dashboard, and fetched for the patient's Alexa Device as per needs.
